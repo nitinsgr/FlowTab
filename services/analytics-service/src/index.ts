@@ -1,5 +1,4 @@
-const express = require('express');
-const { config } = require('@flowtab/config');
+import express from 'express';
 
 const app = express();
 const PORT = process.env.PORT || 3001;

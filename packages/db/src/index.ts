@@ -1,15 +1,15 @@
-const { Pool } = require('pg');
+import { Pool, QueryResult } from 'pg';
 
-let pool;
+let pool: Pool | null = null;
 
-function getPool() {
+export function getPool(): Pool {
   if (!pool) {
     pool = new Pool({ connectionString: process.env.DATABASE_URL });
   }
   return pool;
 }
 
-async function query(text, params) {
+export async function query(text: string, params?: unknown[]): Promise<QueryResult> {
   const client = await getPool().connect();
   try {
     return await client.query(text, params);
@@ -17,5 +17,3 @@ async function query(text, params) {
     client.release();
   }
 }
-
-module.exports = { getPool, query };

@@ -1,18 +1,14 @@
-const assert = require('node:assert');
-
-function env(name, fallback) {
+export function env(name: string, fallback?: string): string {
   const value = process.env[name];
   if (value !== undefined) return value;
   if (fallback !== undefined) return fallback;
   throw new Error(`Missing required environment variable: ${name}`);
 }
 
-function dbUrl() {
+export function dbUrl(): string {
   return env('DATABASE_URL');
 }
 
-function jwtSecret() {
+export function jwtSecret(): string {
   return env('JWT_SECRET');
 }
-
-module.exports = { env, dbUrl, jwtSecret };

@@ -1,0 +1,8 @@
+CREATE TABLE restaurants (
+  id UUID PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  slug VARCHAR(100) UNIQUE NOT NULL,
+  avg_service_rate NUMERIC(5,2) NOT NULL DEFAULT 15.0,
+  avg_table_capacity INTEGER NOT NULL DEFAULT 4,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);

@@ -3,8 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "description": "Database layer — schema, migrations, models",
-  "main": "src/index.js",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "tsc",
+    "migrate": "ts-node -e \"const m = require('./src/migrate'); m.applyPending().then(() => process.exit(0))\"",
+    "seed": "ts-node -e \"const s = require('./src/seed'); s.seed().then(() => process.exit(0))\"",
+    "setup": "ts-node -e \"const m = require('./src/migrate'); const s = require('./src/seed'); m.applyPending().then(() => s.seed()).then(() => process.exit(0))\""
+  },
   "dependencies": {
-    "pg": "^8.11.0"
+    "pg": "^8.11.0",
+    "uuid": "^14.0.0"
   }
 }
