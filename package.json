@@ -1,0 +1,19 @@
+{
+  "name": "flowtab",
+  "version": "0.1.0",
+  "private": true,
+  "description": "FlowTab — Restaurant queue & analytics SaaS",
+  "scripts": {
+    "dev": "echo 'Use docker-compose up for local dev'",
+    "lint": "eslint 'services/*/src/**/*.{js,ts}' 'apps/*/src/**/*.{js,ts}'",
+    "format": "prettier --write '**/*.{js,ts,json,yaml,yml}'",
+    "format:check": "prettier --check '**/*.{js,ts,json,yaml,yml}'"
+  },
+  "devDependencies": {
+    "eslint": "^8.56.0",
+    "prettier": "^3.2.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

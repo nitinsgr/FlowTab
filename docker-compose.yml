@@ -1,0 +1,92 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: flowtab-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: example
+      POSTGRES_DB: flowtab
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: flowtab-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  queue-service:
+    build:
+      context: ./services/queue-service
+      target: development
+    container_name: flowtab-queue-service
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgres://postgres:example@postgres:5432/flowtab
+      - JWT_SECRET=supersecret
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./services/queue-service/src:/app/src
+      - ./services/queue-service/package.json:/app/package.json:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  analytics-service:
+    build:
+      context: ./services/analytics-service
+      target: development
+    container_name: flowtab-analytics-service
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgres://postgres:example@postgres:5432/flowtab
+      - JWT_SECRET=supersecret
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./services/analytics-service/src:/app/src
+      - ./services/analytics-service/package.json:/app/package.json:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  web:
+    build:
+      context: ./apps/web
+      target: development
+    container_name: flowtab-web
+    environment:
+      - REACT_APP_API_URL=http://localhost:3000/api
+    ports:
+      - "3002:80"
+    volumes:
+      - ./apps/web/src:/app/src
+      - ./apps/web/package.json:/app/package.json:ro
+    depends_on:
+      - queue-service
+      - analytics-service
+
+volumes:
+  pg_data:

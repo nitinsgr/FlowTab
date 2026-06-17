@@ -1,0 +1,10 @@
+{
+  "name": "@flowtab/web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "FlowTab frontend",
+  "scripts": {
+    "start": "echo \"Frontend starting\" && sleep infinity",
+    "lint": "eslint src/"
+  }
+}
