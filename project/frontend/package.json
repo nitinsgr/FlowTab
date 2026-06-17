@@ -1,0 +1,9 @@
+{
+  "name": "restaurant-saas-frontend",
+  "version": "0.1.0",
+  "description": "React frontend for FlowTab",
+  "private": true,
+  "scripts": {
+    "start": "echo \"Frontend starting\" && sleep infinity"
+  }
+}
